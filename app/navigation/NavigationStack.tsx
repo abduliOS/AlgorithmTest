@@ -7,6 +7,7 @@ import { navigationRef } from './NavigationService';
 
 import Login from 'app/screens/Login';
 import Home from 'app/screens/Home';
+import Details from 'app/screens/DetailsPage';
 import ForgotPassword from 'app/screens/ForgotPassword';
 
 import ThemeController from '../components/ThemeController';
@@ -66,6 +67,7 @@ const AuthNavigator = () => {
 const LoggedInNavigator = () => (
   <LoggedInStack.Navigator>
     <Stack.Screen name="Home" component={Home} options={homeOptions} />
+    <Stack.Screen name="Details" component={Details} options={homeOptions} />
   </LoggedInStack.Navigator>
 );
 

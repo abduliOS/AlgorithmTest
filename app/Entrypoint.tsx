@@ -17,12 +17,19 @@ import {
 import Navigator from 'app/navigation';
 import configureStore from 'app/store';
 import { IThemeState } from 'app/models/reducers/theme';
- 
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+
 const { persistor, store } = configureStore();
 
 interface IState {
   themeReducer: IThemeState;
 }
+
+// Initialize Apollo Client
+const client = new ApolloClient({
+  uri: 'localhost:4000/graphql',
+  cache: new InMemoryCache(),
+});
 
 const RootNavigation: React.FC = () => {
   const isDark = useSelector((state: IState) => state.themeReducer.isDark);
@@ -30,9 +37,11 @@ const RootNavigation: React.FC = () => {
   const combinedTheme = isDark ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
-    <PaperProvider theme={paperTheme}>
-      <Navigator theme={combinedTheme} />
-    </PaperProvider>
+    <ApolloProvider client={client}>
+      <PaperProvider theme={paperTheme}>
+        <Navigator theme={combinedTheme} />
+      </PaperProvider>
+    </ApolloProvider>
   );
 };
 

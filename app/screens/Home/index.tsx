@@ -1,11 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
 import { Button } from 'react-native-paper';
-
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from 'react-native';
 import { useDispatch } from 'react-redux';
 import * as loginActions from 'app/store/actions/loginActions';
-import SegmentedControlTab from 'react-native-segmented-control-tab';
-import { FlatGrid } from 'react-native-super-grid';
+import NavigationService from 'app/navigation/NavigationService';
+import {
+  Card,
+  CardTitle,
+  CardContent,
+  CardAction,
+  CardButton,
+  CardImage,
+} from 'react-native-material-cards';
 
 import styles from './styles';
 const Home: React.FC = () => {
@@ -13,170 +27,90 @@ const Home: React.FC = () => {
 
   const dispatch = useDispatch();
   const onLogout = () => dispatch(loginActions.logOut());
+  const [pokemons, setPokemons] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(20);
+  const [searchfeild, setSearchfeild] = useState('');
 
-  const handleIndexChange = (index: number) => {
-    setSelectedIndex(index);
+  useEffect(() => {
+    fetchPokemons(limit, offset);
+  }, [limit, offset]);
+
+  const fetchPokemons = (limitF: number, offsetF: number) => {
+    fetch(
+      'https://pokeapi.co/api/v2/pokemon?limit=' +
+        limitF +
+        '&offset=' +
+        offsetF,
+    )
+      .then(response => response.json())
+      .then(pokemonsR => {
+        setPokemons(pokemonsR.results);
+        console.log(pokemonsR.results);
+      });
   };
 
-  const array = [
-    '[ [3,4], [4,5], [2,3], [3,4] ]',
-    'Passengers waiting in queue',
-    '[ [3,2], [4,3], [2,3], [3,4] ]',
-    '30 passengers seating',
-  ];
-
-  const [itemsGridOne, setItemsGridOne] = React.useState([
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-  ]);
-
-  const [itemsGridTwo, setItemsGridTwo] = React.useState([
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#3c66a4' },
-  ]);
-  const [itemsGridThree, setItemsGridThree] = React.useState([
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-  ]);
-  const [itemsGridFour, setItemsGridFour] = React.useState([
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#3c66a4' },
-    { name: '', code: '#ab3a3c' },
-    { name: '', code: '#88ab47' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-    { name: '', code: '#ecf0f1' },
-  ]);
   return (
     <View style={styles.container}>
-      <View style={styles.segment}>
-        <SegmentedControlTab
-          values={['2D-One', 'Queue', '2D-Two', '30 Table']}
-          selectedIndex={selectedIndex}
-          onTabPress={handleIndexChange}
-        />
-        <Text style={styles.text}>{array[selectedIndex]}</Text>
+      <View style={styles.parentSearch}>
+        <View style={styles.searchCont}>
+          <TextInput
+            style={styles.searchfeild}
+            placeholder="Search Pokemons"
+            onChangeText={value => setSearchfeild(value)}
+            value={searchfeild}
+          />
+        </View>
+        <Button
+          icon="logout"
+          mode="outlined"
+          onPress={onLogout}
+          style={styles.logout}>
+          Logout
+        </Button>
       </View>
-      <View style={styles.containerBox}>
-        <View style={styles.gridViewFirstBox}>
-          <FlatGrid
-            itemDimension={20}
-            data={itemsGridOne}
-            style={styles.gridView}
-            spacing={4}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.itemContainer, { backgroundColor: item.code }]}>
-                <Text style={styles.itemName}>{item.name}</Text>
-              </View>
-            )}
-          />
+      <ScrollView
+        onScroll={e => {
+          let paddingToBottom = 10;
+          paddingToBottom += e.nativeEvent.layoutMeasurement.height;
+          if (
+            e.nativeEvent.contentOffset.y >=
+            e.nativeEvent.contentSize.height - paddingToBottom
+          ) {
+            // fetchPokemons(40, 1);
+            setLimit(limit + 20);
+            setOffset(offset + 1);
+          }
+        }}>
+        <View style={styles.containerPok}>
+          {pokemons
+            .filter(pokemon =>
+              pokemon.name.toLowerCase().includes(searchfeild.toLowerCase()),
+            )
+            .map((pokemon, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    NavigationService.navigate('Details', {
+                      pokemon: pokemon.name,
+                    })
+                  }>
+                  <View style={styles.card}>
+                    <Card key={index}>
+                      <CardImage
+                        source={{
+                          uri: `https://img.pokemondb.net/sprites/omega-ruby-alpha-sapphire/dex/normal/${pokemon.name}.png`,
+                        }}
+                        title={pokemon.name}
+                        style={styles.cardI}
+                      />
+                    </Card>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
         </View>
-        <View style={styles.gridViewSecondBox}>
-          <FlatGrid
-            itemDimension={20}
-            data={itemsGridTwo}
-            style={styles.gridView}
-            spacing={4}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.itemContainer, { backgroundColor: item.code }]}>
-                <Text style={styles.itemName}>{item.name}</Text>
-              </View>
-            )}
-          />
-        </View>
-        <View style={styles.gridViewThirdBox}>
-          <FlatGrid
-            itemDimension={20}
-            data={itemsGridThree}
-            style={styles.gridView}
-            spacing={4}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.itemContainer, { backgroundColor: item.code }]}>
-                <Text style={styles.itemName}>{item.name}</Text>
-              </View>
-            )}
-          />
-        </View>
-        <View style={styles.gridViewFirstBox}>
-          <FlatGrid
-            itemDimension={20}
-            data={itemsGridFour}
-            style={styles.gridView}
-            spacing={4}
-            renderItem={({ item }) => (
-              <View
-                style={[styles.itemContainer, { backgroundColor: item.code }]}>
-                <Text style={styles.itemName}>{item.name}</Text>
-              </View>
-            )}
-          />
-        </View>
-      </View>
-      <Button
-        icon="logout"
-        mode="outlined"
-        onPress={onLogout}
-        style={styles.logout}>
-        Logout
-      </Button>
+      </ScrollView>
     </View>
   );
 };

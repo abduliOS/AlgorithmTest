@@ -14,12 +14,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     position: 'absolute',
   },
-  logout: {
-    bottom: 30,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    position: 'absolute',
-  },
   text: {
     marginTop: 30,
     justifyContent: 'center',
@@ -77,6 +71,51 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 12,
     color: '#fff',
+  },
+  containerPok: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 30,
+  },
+  card: {
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    marginHorizontal: 20,
+    marginVertical: 10,
+    width: 150,
+    height: 150,
+  },
+  cardI: {
+    width: 100,
+    height: 100,
+  },
+  TitleI: {
+    fontSize: 10,
+    color: '#fff',
+  },
+  searchCont: {
+    alignItems: 'flex-end',
+  },
+  parentSearch: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    top: 20,
+  },
+  logout: {
+    marginLeft: 10,
+    alignItems: 'flex-end',
+  },
+  searchfeild: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#000',
+    textAlign: 'center',
+    width: 250,
+    borderRadius: 50,
   },
 });
 
